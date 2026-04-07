@@ -99,3 +99,7 @@ wandb/
 
 # checkpoints
 checkpoints/
+qwen25-1.5b-ins/
+openr1_rl_dataset/
+openr1_sft_dataset/
+*.db

@@ -32,7 +32,7 @@ from transformers import AutoTokenizer
 random.seed(42)
 
 # Configuration parameters
-TOKENIZER_MODEL_PATH = "YOUR MODEL TOKENIZER PATH"
+TOKENIZER_MODEL_PATH = "/root/Trinity-RFT/qwen25-1.5b-ins"
 MAX_TOKEN_LENGTH = 8196
 SFT_SAMPLE_SIZE = 5000
 RL_SAMPLE_SIZE = 20000
