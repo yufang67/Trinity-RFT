@@ -1,5 +1,6 @@
 """Filed based buffer reader."""
 
+import os
 from typing import List, Optional, Tuple
 
 import datasets
@@ -8,6 +9,15 @@ from datasets import Dataset, load_dataset
 from trinity.buffer.buffer_reader import BufferReader
 from trinity.buffer.schema import FORMATTER
 from trinity.common.config import StorageConfig
+
+
+def _load_dataset(path, name=None, split=None):
+    """Load dataset, handling single file paths that datasets lib can't auto-detect."""
+    if os.path.isfile(path):
+        ext = os.path.splitext(path)[1].lstrip(".")
+        fmt = {"jsonl": "json"}.get(ext, ext)
+        return load_dataset(fmt, data_files=path, name=name, split=split)
+    return load_dataset(path, name=name, split=split)
 
 
 class DummyProgressBar:
@@ -134,7 +144,7 @@ class ExperienceFileReader(BaseFileReader):
         )
         self.read_batch_size = config.batch_size
         self.dataset = _HFBatchReader(
-            load_dataset(config.path, name=config.subset_name, split=config.split),
+            _load_dataset(config.path, name=config.subset_name, split=config.split),
             name=config.name,
             default_batch_size=self.read_batch_size,
             total_epochs=config.total_epochs,
@@ -172,7 +182,7 @@ class TaskFileReader(BaseFileReader):
         datasets.disable_caching()
         self.read_batch_size = config.batch_size
         self.dataset = _HFBatchReader(
-            load_dataset(self.config.path, name=self.config.subset_name, split=self.config.split),
+            _load_dataset(self.config.path, name=self.config.subset_name, split=self.config.split),
             name=self.config.name,
             default_batch_size=self.read_batch_size,
             total_epochs=self.config.total_epochs if not self.config.is_eval else 1,

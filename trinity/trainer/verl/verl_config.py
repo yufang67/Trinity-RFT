@@ -6,6 +6,8 @@ from typing import Any, Dict, List, Optional, Union
 from omegaconf import OmegaConf
 from verl.workers.config import PolicyLossConfig, RouterReplayConfig
 
+from verl.trainer.config.algorithm import RolloutCorrectionConfig
+
 from trinity.algorithm import ALGORITHM_TYPE
 from trinity.common.config import Config, SynchronizerConfig, set_if_none
 from trinity.common.constants import EXPLORER_NAME
@@ -312,6 +314,11 @@ class RewardModel:
 
 
 @dataclass
+class Reward:
+    reward_model: RewardModel = field(default_factory=RewardModel)
+
+
+@dataclass
 class CustomRewardFunction:
     path: Optional[str] = None
     name: str = "compute_score"
@@ -326,11 +333,7 @@ class KL_Ctrl:
 
 
 @dataclass
-class RolloutCorrection:
-    rollout_is: Optional[str] = None
-    rollout_is_threshold: float = 2.0
-    rollout_rs: Optional[str] = None
-    rollout_rs_threshold: Optional[float] = None
+class RolloutCorrection(RolloutCorrectionConfig):
     rollout_rs_threshold_lower: Optional[float] = None
     rollout_token_veto_threshold: Optional[float] = None
     # Because rollout and training in Trinity runs separately,
@@ -392,7 +395,7 @@ class veRLConfig:
     data: Data = field(default_factory=Data)
     actor_rollout_ref: ActorRolloutRef = field(default_factory=ActorRolloutRef)
     critic: Critic = field(default_factory=Critic)
-    reward_model: RewardModel = field(default_factory=RewardModel)
+    reward: Reward = field(default_factory=Reward)
     custom_reward_function: CustomRewardFunction = field(default_factory=CustomRewardFunction)
     algorithm: Algorithm = field(default_factory=Algorithm)
     trainer: Trainer = field(default_factory=Trainer)

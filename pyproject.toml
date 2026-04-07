@@ -21,7 +21,7 @@ classifiers = [
 ]
 requires-python = ">=3.10,<3.13"
 dependencies = [
-    "verl==0.7.0",
+    "verl>=0.7.0",
     "ray[default]>=2.50.0",
     "tensordict",
     "wandb",
@@ -45,6 +45,8 @@ dependencies = [
     "transformers>=4.51.0",
     "datasets>=4.0.0",
     "typer>=0.20.1",
+    "torch>=2.11.0",
+    "vllm==0.19.0",
 ]
 
 [project.scripts]
@@ -105,7 +107,7 @@ doc = [
 
 mm = [
     "qwen-vl-utils",
-    "transformers>=4.54.0",
+    "transformers>=5.0.0",
     "blobfile",
 ]
 
